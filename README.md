@@ -2,6 +2,7 @@
 
 This container provides a lightweight snapshot service for Milestone XProtect systems using WebRTC and Puppeteer. It connects to the VMS via the WebRTC API and captures a single JPEG frame from the video stream, ideal for embedding in dashboards or forwarding to third-party systems.
 
+
 ---
 
 ## 📦 Features
@@ -153,6 +154,7 @@ with the following content:
 * The container runs headless Chromium via Puppeteer.
 * A snapshot is only captured once the video track is ready.
 * Any failures (e.g., wrong credentials, no stream, network) will return HTTP 500.
+* This code comes with no warranty! Delivered as is. Would you like to make it better, I am open for collaboration.
 
 ---
 
