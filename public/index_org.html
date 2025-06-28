@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Live video streaming with WebRTC</title>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/tokenCommunication.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/rest.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+  <body>
+      <h1>Live video streaming with WebRTC</h1>
+      <label>Date and time: </label><label id="frameTimeLabel"></label>
+        <div>
+            <video id="videoCtl" controls="controls" autoplay="autoplay"></video>
+            <div id="rightColumn">
+                <div>
+                    <h4>Diagnostics log</h4>
+                    <span id="diagnostics"></span>
+                    <br />
+                    <button onclick="clearDiagnosticsLog()">Clear Log</button>
+                </div>
+                <div>
+                    <h4>PTZ commands</h4>
+                    <span id="ptz">
+
+                        <button onclick="command('upLeft')">&#8598;</button>
+                        <button onclick="command('up')">&#8593;</button>
+                        <button onclick="command('upRight')">&#8599;</button>
+                        <br />
+                        <button onclick="command('left')">&#8592;</button>
+                        <button onclick="command('home')">&#8962;</button>
+                        <button onclick="command('right')">&#8594;</button>
+                        <br />
+                        <button onclick="command('downLeft')">&#8601;</button>
+                        <button onclick="command('down')">&#8595;</button>
+                        <button onclick="command('downRight')">&#8600;</button>
+                        <br />
+                        <br />
+                        <button id="auxButton" onclick="aux('1')">Aux 1</button>
+                        <button id="auxButton" onclick="aux('2')">Aux 2</button>
+                        <button id="auxButton" onclick="aux('3')">Aux 3</button>
+                        <button id="auxButton" onclick="aux('4')">Aux 4</button>
+                    </span>
+                </div>
+            </div>                                        
+        </div>
+        <div>
+            <div class="input">
+                <label for="apiGatewayUrl">API Gateway URL:</label>
+                <input type="url" id="apiGatewayUrl" name="apiGatewayUrl" size="42" placeholder="https://apigatewayserver.example.com/api" />
+            </div>
+            <div class="input">
+                <label for="deviceId">DeviceId:</label>
+                <input type="text" id="deviceId" name="deviceId" size="42" pattern="^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$" placeholder="A364956F-39A5-4CBC-9FFE-55B0C802CA77" />
+                <medium>&emsp;DeviceId can be either CameraId or MicrophoneId.</medium>
+            </div>
+            <div class="input">
+                <label for="streamId">StreamId (optional):</label>
+                <input type="text" id="streamId" name="streamId" size="42" pattern="^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$" placeholder="5E9BA1DC-D012-425B-AB5A-611A5FB6DAE5" />
+            </div>
+            <div class="input">
+                <label for="includeAudio">Include Audio (optional):</label>
+                <input type="checkbox" id="includeAudio" name="includeAudio" checked />
+            </div>
+            <div class="input">
+                <label for="playbackTime">Playback Time (optional):</label>
+                <input type="datetime" id="playbackTime" name="playbackTime" size="42" pattern="^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?Z$" placeholder="2023-01-01T01:01:01.000Z" />
+            </div>
+            <div class="input">
+                <label for="skipGaps">Skip Gaps (optional):</label>
+                <input type="checkbox" id="skipGaps" name="skipGaps" />
+            </div>
+            <div class="input">
+                <label for="speed">Playback Speed (optional):</label>
+                <input type="text" id="speed" name="speed" pattern="\d{1,2}([.]\d+)?" placeholder="1.0" />
+            </div>
+            <br>
+            <div class="input">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="username" />
+            </div>
+            <div class="input">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="password" />
+            </div>
+            <div class="input">
+                <label for="stunUrl">STUN URL (optional):</label>
+                <input type="url" id="stunUrl" name="stunUrl" size="42" placeholder="stun:stun1.l.google.com:19302" />
+            </div>
+            <div class="input">
+                <label for="turnUrl">TURN URL (optional):</label>
+                <input type="url" id="turnUrl" name="turnUrl" size="42" placeholder="turn:myturn.turnprovider.abc:34567" />
+                <label for="turnUrl">Username:</label>
+                <input type="text" id="turnUserName" name="turnUserName" size="42" placeholder="myTurnUser" />
+                <label for="turnUrl">Credential:</label>
+                <input type="password" id="turnCredential" name="turnCredential" size="42" placeholder="credential" />
+            </div>
+        </div>
+      <br><br>
+      <div class="buttons">
+        <div>
+            <button class="bar-item" onclick="tabSwitch(this, 'rest')" id="selected">REST</button>
+            <button class="bar-item" onclick="tabSwitch(this, 'websocket')">WebSocket</button>
+        </div>
+        <div id="rest" class="tabs">
+            <b>REST</b>
+            <br/>
+            <br/>
+            <button onclick="start()">Start</button>
+            <button onclick="closePeerConnection()">Close</button>
+        </div>
+        <div id="websocket" class="tabs" style="display:none;">
+            <b>WebSocket</b>
+            <br/>
+            <br/>
+            <button onclick="startWebsocket()">Start</button>
+            <button onclick="closePeerConnection()">Close</button>
+        </div>
+      </div>
+  </body>
+</html>

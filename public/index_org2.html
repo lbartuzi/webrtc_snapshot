@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Live video streaming with WebRTC</title>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/tokenCommunication.js"></script>
+    <script src="js/rest.js"></script>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <h1>Live video streaming with WebRTC</h1>
+    <label>Date and time: </label><label id="frameTimeLabel"></label>
+    <div>
+        <video id="videoCtl" controls autoplay muted></video>
+        <div id="rightColumn">
+            <div>
+                <h4>Diagnostics log</h4>
+                <span id="diagnostics"></span>
+                <br />
+                <button onclick="clearDiagnosticsLog()">Clear Log</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                serverIp: params.get('serverIp'),
+                username: params.get('username'),
+                password: params.get('password'),
+                deviceId: params.get('deviceId'),
+                timestamp: params.get('timestamp')
+            };
+        }
+
+        async function setupAndStart() {
+            const { serverIp, username, password, deviceId, timestamp } = getQueryParams();
+
+            if (!serverIp || !username || !password || !deviceId) {
+                document.getElementById('diagnostics').innerHTML = 'Missing required parameters.';
+                return;
+            }
+
+            document.getElementById("apiGatewayUrl").value = `http://${serverIp}/API/`;
+            document.getElementById("username").value = username;
+            document.getElementById("password").value = password;
+            document.getElementById("deviceId").value = deviceId;
+            document.getElementById("playbackTime").value = timestamp || '';
+
+            await start();
+        }
+
+        window.onload = setupAndStart;
+    </script>
+
+    <!-- Hidden inputs to maintain compatibility with existing JS files -->
+    <input type="hidden" id="apiGatewayUrl" />
+    <input type="hidden" id="deviceId" />
+    <input type="hidden" id="streamId" />
+    <input type="hidden" id="includeAudio" checked />
+    <input type="hidden" id="playbackTime" />
+    <input type="hidden" id="skipGaps" />
+    <input type="hidden" id="speed" />
+    <input type="hidden" id="username" />
+    <input type="hidden" id="password" />
+    <input type="hidden" id="stunUrl" />
+    <input type="hidden" id="turnUrl" />
+    <input type="hidden" id="turnUserName" />
+    <input type="hidden" id="turnCredential" />
+
+</body>
+
+</html>
